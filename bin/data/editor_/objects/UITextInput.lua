@@ -29,6 +29,9 @@ end
 function UITextInput:getName(nval)
 	return self.labelText
 end
+function UITextInput:getValue()
+	return self.value
+end
 function UITextInput:touchDown(x, y, id)
 	self.hasFocus = false
 	self:setColor(255, 255, 255, 200)

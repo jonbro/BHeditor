@@ -40,6 +40,9 @@ end
 function Slider:getName()
 	return self.labelText
 end
+function Slider:getValue()
+	return self.value
+end
 function Slider:setPosition(x, y)
 	Rectangle.setPosition(self,x, y)
 	if self.label then self.label:setPosition(x, y+self.h) end

@@ -1,10 +1,15 @@
 ParticleEdit = class(ScrollableGuiGroup, function(o, x, y, w, h)
 	ScrollableGuiGroup.init(o, x, y, w, h)
 
-	o.particles = ParticleSystem(sprites['tiles']['smoke_particle.png'], sheets['tiles'], 100)
+	o.particles = ParticleSystem(sprites['tiles']['circle.png'], sheets['tiles'], 100)
 	o.particles:start()
 	o.particles:setPosition(bludG.camera.w/2, bludG.camera.h/2)
 	o.particles:setGravity(1, 20)
+
+	local name = o:addDown(o:textInput(20, "Particle Name"))
+	name:setValue(os.time())
+	o:addDown(o:button(20,"Save"))
+
 	o:addDown(o:slider(15, 0, 30, 1, "EMISSION"))
 	o:addDown(o:slider(15, 0, math.pi*2, 0.5, "SPREAD"))
 	o:addDown(o:slider(15, 0, math.pi*2, 0.5, "DIRECTION"))
@@ -39,8 +44,13 @@ ParticleEdit = class(ScrollableGuiGroup, function(o, x, y, w, h)
 	o.si_e = 1
 	o.startColor = {128, 128, 128, 128}
 	o.endColor = {128, 128, 128, 128}
+
 end)
 function ParticleEdit:valueChange(l, v)
+	if l == "Save" then
+		local s_data = self:save()
+		persistence.store(blud.bundle_root .. "/particle_data_".. s_data['Particle Name'] ..".lua", s_data);
+	end
 	if l == "SPREAD" then
 		self.particles:setSpread(v)
 	end
@@ -123,3 +133,5 @@ function ParticleEdit:update()
 	Group.update(self)
 	self.particles:update(bludG.elapsed)
 end
+
+-- mainState = WrapperState(ParticleEdit(0,0,bludG.camera.w/3, bludG.camera.h));
